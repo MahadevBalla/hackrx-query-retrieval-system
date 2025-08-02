@@ -1,15 +1,20 @@
+# app/retriever.py
+
 import faiss
 import numpy as np
-from app.embedder import model
-
-index = faiss.IndexFlatL2(384)
-
+from .embedder import model # Use relative import for better package structure
 
 def retrieve_relevant_chunks(
-    question: str, chunk_embeddings, chunks: list[str], top_k=5
+    question: str, index: faiss.Index, chunks: list[str], chunk_embeddings, top_k=5
 ):
-    index = faiss.IndexFlatL2(384)
-    index.add(chunk_embeddings.cpu().numpy().astype("float32"))
-    q_vec = model.encode([question])[0].reshape(1, -1).astype("float32")
-    D, I = index.search(q_vec, top_k)
-    return [chunks[i] for i in I[0]]
+    """
+    Retrieves the most relevant chunks for a question from a pre-built FAISS index.
+    """
+    # Encode the question
+    q_vec = model.encode([question], convert_to_tensor=False).astype("float32")
+    
+    # Search the index
+    distances, indices = index.search(q_vec, top_k)
+    
+    # Return the corresponding chunks
+    return [chunks[i] for i in indices[0]]
