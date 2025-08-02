@@ -1,11 +1,10 @@
-import pdfplumber
+import fitz
 
 
 def parse_documents(path: str) -> list[str]:
-    chunks = []
-    with pdfplumber.open(path) as pdf:
-        for page in pdf.pages:
-            text = page.extract_text()
-            if text:
-                chunks.extend([text[i : i + 500] for i in range(0, len(text), 500)])
+    doc = fitz.open(path)
+    full_text = ""
+    for page in doc:
+        full_text += page.get_text("text")
+    chunks = [full_text[i : i + 500] for i in range(0, len(full_text), 500)]
     return chunks

@@ -9,7 +9,15 @@ GEMINI_URL = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-2.
 
 
 def generate_answers(question: str, context_chunks: list[str]) -> str:
-    prompt = f"Answer the question based on the context below:\n\nContext:\n{''.join(context_chunks)}\n\nQuestion: {question}"
+    prompt = (
+        "You are a helpful assistant answering policy-related questions using the provided document excerpts.\n"
+        "Respond **only in plain text** without any Markdown, bullet points, or formatting symbols like '*', '**', or '-'.\n"
+        # "Your answer should be factual, concise, and in complete sentences similar to an official policy summary.\n"
+        "Avoid repeating phrases and do not speculate. Only answer if the information is clearly stated in the context.\n\n"
+        "Document Snippets:\n"
+        + "\n\n---\n".join(context_chunks)
+        + f"\n\nQuestion: {question}\nAnswer:"
+    )
 
     payload = {"contents": [{"parts": [{"text": prompt}]}]}
 
