@@ -37,3 +37,5 @@ dist/
 # Editor backups
 *~
 *.swp
+
+temp.pdf
