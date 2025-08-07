@@ -11,4 +11,7 @@ def load_model():
     model = SentenceTransformer("all-MiniLM-L6-v2")
 
 def embed_chunks(chunks: list[str]):
+    global model
+    if model is None:
+        model = SentenceTransformer("all-MiniLM-L6-v2")  # Lazy load in case startup not triggered
     return model.encode(chunks, convert_to_tensor=True)
