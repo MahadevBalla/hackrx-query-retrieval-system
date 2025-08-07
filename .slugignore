@@ -1,0 +1,11 @@
+*.pyc
+__pycache__/
+*.ipynb
+*.pdf
+*.md
+test.py
+*.log
+*.csv
+*.gz
+*.zip
+*.tar
